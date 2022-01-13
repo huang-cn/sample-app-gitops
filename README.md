@@ -11,6 +11,7 @@
     - [Deploy with Command Line](#deploy-with-command-line)
       - [Prepare Environment](#prepare-environment)
       - [Deploy Robot Shop](#deploy-robot-shop)
+      - [Deploy Humio with fluentbit and integrating with Robot Shop](#deploy-humio-with-fluentbit-and-integrating-with-robot-shop)
     - [Deploy with Gitops UI console](#deploy-with-gitops-ui-console)
       - [UI Configure Argo CD](#ui-configure-argo-cd)
       - [UI Setup Storage](#ui-setup-storage)
@@ -109,7 +110,7 @@ oc get pod -n robot-shop
 ```
 
 #### Deploy Humio with fluentbit and integrating with Robot Shop 
-Get the Openshift hostname fro the target cluster environment.  
+Get the Openshift hostname from the target cluster environment.  
 ```shell
 OCP_HOSTNAME=$(CLUSTER_INFO=$(kubectl cluster-info |grep 'https://'); echo -n ${CLUSTER_INFO##*/}|cut -c5-|cut -d':' -f1)
 ```
