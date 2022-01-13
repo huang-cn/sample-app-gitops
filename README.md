@@ -98,7 +98,7 @@ oc get pod -n rook-ceph
 
 ```shell
 argocd app create sample-robot-shop --repo $GIT_REPO \
-  --dest-server $ARGO_CLUSTER \
+  --dest-server $TARGET_CLUSTER \
   --sync-policy automated \
   --revision HEAD \
   --path config/apps/robot-shop
@@ -107,6 +107,21 @@ Use below command to check the robot-shop deployment status in the target cluste
 ```shell
 oc get pod -n robot-shop
 ```
+
+#### Deploy Humio with fluentbit and integrating with Robot Shop 
+   
+```shell
+OCP_HOSTNAME=$(CLUSTER_INFO=$(kubectl cluster-info |grep 'https://'); echo -n ${CLUSTER_INFO##*/}|cut -c5-|cut -d':' -f1)
+argocd app create humio --repo $GIT_REPO \
+  --sync-option CreateNamespace=true \
+  --sync-policy automated \
+  --dest-namespace humio-logging \
+  --dest-server $TARGET_CLUSTER \
+  --path gitops-charts/humio-helm-charts \
+  --revision HEAD \
+  --helm-set humio-core.openshift.host=$OCP_HOSTNAME
+```
+
 ### Deploy with Gitops UI console
   
 In this example, we will use `https://my-target-cluster-domain.com:6443` as the example target cluster for the deployment, replace it with your own target cluster when performing deployment.  
