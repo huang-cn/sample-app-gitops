@@ -109,9 +109,13 @@ oc get pod -n robot-shop
 ```
 
 #### Deploy Humio with fluentbit and integrating with Robot Shop 
-   
+Get the Openshift hostname fro the target cluster environment.  
 ```shell
 OCP_HOSTNAME=$(CLUSTER_INFO=$(kubectl cluster-info |grep 'https://'); echo -n ${CLUSTER_INFO##*/}|cut -c5-|cut -d':' -f1)
+```
+  
+Deploy Humio with Fluntbit in ArgoCD environment.  
+```shell
 argocd app create humio --repo $GIT_REPO \
   --sync-option CreateNamespace=true \
   --sync-policy automated \
@@ -119,7 +123,7 @@ argocd app create humio --repo $GIT_REPO \
   --dest-server $TARGET_CLUSTER \
   --path gitops-charts/humio-helm-charts \
   --revision HEAD \
-  --helm-set humio-core.openshift.host=$OCP_HOSTNAME
+  --helm-set humio-core.openshift.host=<Replace with value of OCP_HOSTNAME from target cluster>
 ```
 
 ### Deploy with Gitops UI console
